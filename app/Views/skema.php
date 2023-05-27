@@ -7,8 +7,14 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="<?=base_url()?>home" class="nav-link">Home</a>
       </li>
+      <?php if (session()->has('admin')) {?>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="<?=base_url()?>sertifikasi" class="nav-link">Sertifikasi</a>
+        </li>
+      <?php }?>
+      
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?=base_url()?>sertifikasi" class="nav-link">Sertifikasi</a>
+        <a href="<?=base_url()?>logout" class="nav-link">Logout</a>
       </li>
     </ul>
     

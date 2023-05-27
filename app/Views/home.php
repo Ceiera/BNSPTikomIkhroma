@@ -5,11 +5,26 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?=base_url()?>home" class="nav-link">Home</a>
+        <a href="<?php if (session()->has('admin')) {
+            echo base_url('home');
+        }else{
+            echo base_url('user');
+        }?>" class="nav-link">Home</a>
       </li>
+      <?php if (session()->has('admin')) {?>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="<?=base_url()?>sertifikasi" class="nav-link">Sertifikasi</a>
+        </li>
+      <?php }?>
+      <?php if (session()->has('admin')) {?>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="<?=base_url()?>logout" class="nav-link">Logout</a>
+        </li>
+      <?php }else {?>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?=base_url()?>sertifikasi" class="nav-link">Sertifikasi</a>
+        <a href="<?=base_url()?>login" class="nav-link">Login</a>
       </li>
+      <?php }?>
     </ul>
     
 </nav>
@@ -24,7 +39,12 @@
             <h2 class="text-center display-4">Search</h2>
             <div class="row">
                 <div class="col-md-8 offset-md-2">
-                    <?= form_open('home/cari')?>
+                    <?php if (session()->has('admin')) {
+                        echo form_open('home/cari');
+                    }else{
+                        echo form_open('user/cari');
+                    }
+                    ?>
                     <?= csrf_field()?> 
                         <div class="input-group">
                             <input type="search" name="cari" id="cari" class="form-control form-control-lg" placeholder="Cari Berdasarkan Nama">
@@ -55,8 +75,11 @@
                         <th>Jekel</th>
                         <th>Alamat</th>
                         <th>No HP</th>
-                        <th>Edit</th>
-                        <th>Hapus</th>
+                        <?php if (session()->has('admin')) {?>
+                            <th>Edit</th>
+                            <th>Hapus</th>
+                        <?php }?>
+                        
                     </thead>
                     <tbody>
                         <?php foreach ($data as $key) {?>
@@ -98,7 +121,12 @@
                                         <div class="row py-2">
                                             <div class="col-3">KD_SKEMA</div>
                                             <div class="col-1">:</div>
-                                            <div class="col-8"><input class="form-control" type="text" name="kd_skema" id="kd_skema" required></div>
+                                            <div class="col-8"><select class="input-group" name="kd_skema" id="kd_skema">
+                                                <?php foreach ($anu as $key) {
+                                                ?>
+                                                <option value="<?= $key['kd_skema']?>"><?= $key['kd_skema']?></option> 
+                                                <?php } ?>
+                                            </select></div>
                                         </div>
                                         <div class="row py-2">
                                             <div class="col-3">NAMA PESERTA</div>
@@ -155,7 +183,14 @@
   </div>
 
 <script>
+    
     $(document).ready(function () {
+        let admin = '<?= session()->get('admin')?>'
+        if (admin=='') {
+            $('#tambah').hide();
+            $('.edit').hide();
+            $('.hapus').hide();
+        }
         $('#tambah').click(function (e) { 
             $('#modalId').modal('show');
             $('#modalTitleId').text('Tambah Peserta');

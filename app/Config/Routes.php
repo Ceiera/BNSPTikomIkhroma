@@ -30,21 +30,32 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
-$routes->get('/home', 'Rumah::index');
-$routes->post('/home/cari', 'Rumah::cari');
+
 $routes->get('/login', 'Login::indexAdmin');
 $routes->post('/login/admin', 'Login::verifLoginAdmin');
+$routes->get('/user', 'Login::user');
+$routes->post('/user/cari', 'Login::userCari');
 
-$routes->post('/tambah/kirim', 'CRUDform::tambah');
-$routes->post('/edit', 'CRUDform::editGet');
-$routes->post('/edit/kirim', 'CRUDform::editSet');
-$routes->post('/hapus', 'CRUDform::hapus');
 
-$routes->get('/sertifikasi', 'Skema::index');
-$routes->post('/tambahSertifikasi/kirim', 'CRUDskema::tambah');
-$routes->post('/editSertifikasi', 'CRUDskema::editGet');
-$routes->post('/editSertifikasi/kirim', 'CRUDskema::editSet');
-$routes->post('/hapusSertifikasi', 'CRUDskema::hapus');
+$routes->group('',['filter'=>'admin'], static function($routes){
+    $routes->get('/logout', 'Login::logout');
+    
+    $routes->get('/home', 'Rumah::index');
+    $routes->post('/home/cari', 'Rumah::cari');
+
+    $routes->post('/tambah/kirim', 'CRUDform::tambah');
+    $routes->post('/edit', 'CRUDform::editGet');
+    $routes->post('/edit/kirim', 'CRUDform::editSet');
+    $routes->post('/hapus', 'CRUDform::hapus');
+
+    $routes->get('/sertifikasi', 'Skema::index');
+    $routes->post('/tambahSertifikasi/kirim', 'CRUDskema::tambah');
+    $routes->post('/editSertifikasi', 'CRUDskema::editGet');
+    $routes->post('/editSertifikasi/kirim', 'CRUDskema::editSet');
+    $routes->post('/hapusSertifikasi', 'CRUDskema::hapus');
+});
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
